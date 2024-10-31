@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SportSwiftDB</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/base_style.css') }}">
+
+</head>
+<body>
+<div class="container">
+    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+        <a href="/" class="d-flex fw-bolder align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+            <span class="link-hover-animation fs-4">SportSwiftDB</span>
+        </a>
+        <ul class="nav nav-pills">
+            <li class="grow nav-item"><a href="{{ url_for('home') }}" class="nav-link">Home</a></li>
+            <li class="grow nav-item"><a href="{{ url_for('explore') }}" class="nav-link">Explore</a></li>
+            <li class="grow nav-item"><a href="{{ url_for('Cart.cart') }}" class="nav-link">Cart</a></li>
+            <li class="grow nav-item"><a href="{{ url_for('about') }}" class="nav-link">About</a></li>
+            <li class="dropdown-center">
+                <a class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" class="bi bi-person-circle mx-1 mt-1" viewBox="0 0 16 16">
+                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                    <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                </svg></a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{{url_for('Profile.profile')}}">Profile</a></li>
+                    {% if "customer_ID" not in session %}
+                    <li><a class="dropdown-item" href="{{ url_for('auth.login')}}" >Login</a></li>
+                    {% else %}
+                    <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
+                    {% endif %}
+                </ul>
+            </li>
+        </ul>
+    </header>
+</div>
+<!--body-->
+<div class="container pb-5 mb-5">
+    <div class="row">
+        <div class="col-md-6">
+            <h2 class="my-4">Profile</h2>
+            <form method="POST" action="{{ url_for('Profile.update_profile') }}">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="name" value="{{ customer.name }}" readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="address" class="form-label">Address</label>
+                    <input type="text" class="form-control" id="address" value="{{ customer.address }}" readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" value="{{ customer.email }}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">New Password</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-outline-light" style="background-color: #E73725">Update</button>
+            </form>
+        </div>
+    </div>
+
+    {% if products %}
+    <main class="pt-5 pb-5 mb-5">
+        <h2 class="pb-5">Orders</h2>
+        <ul class="px-0">
+            <div class="container row mb-2 mx-0 px-0">
+            {% for product in products %}
+                <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                    <div class="col-auto d-none d-lg-block">
+                        <img src="{{ url_for('static', filename=product[6]) }}" style="max-height :200px; object-fit: scale-down;" class="card-img-top img-fluid" alt="{{ product[1] }}">
+                    </div>
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <h3 class="mb-0">{{ product[1] }}</h3>
+                        <div class="mb-1 text-body-secondary">Price: ₹ {{ product[4] }}</div>
+                        <div class="mb-1 text-body-secondary">Quantity Ordered: {{ product[7] }}</div>
+                        <div class="mb-1 text-body-secondary">Total Price: {{ product[7] *  product[4] }}</div>
+                        <p class="card-text mb-auto">{{ product[3] }}</p>
+                        
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        </ul>   
+    </main>
+    {% endif %}
+
+</div>
+
+<!--footer-->
+<div class="container">
+    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+        <p class="col-md-4 mb-0 text-body-secondary">© 2024 SportSwiftDB</p>
+
+        <ul class="nav col-md-4 justify-content-end">
+            <li class="nav-item"><a href="{{ url_for('home') }}" class="nav-link px-2 text-body-secondary">Home</a></li>
+            <li class="nav-item"><a href="{{ url_for('about') }}" class="nav-link px-2 text-body-secondary">About</a></li>
+        </ul>
+    </footer>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="{{ url_for('static', filename='/JavaScript/home_js.js') }}"></script>
+
+</body>
+</html>
+

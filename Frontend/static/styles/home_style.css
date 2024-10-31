@@ -1,0 +1,30 @@
+.fade-in {
+    opacity: 0;
+    transition: opacity 0.5s ease-in;
+}
+
+.fade-in.visible {
+    opacity: 1;
+}
+.body{
+    background-image: url("../images/home_pic.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.link_to_about{
+    color: inherit;
+    text-decoration: none;
+}
+.card1{
+    background-image: url("../images/explore.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.card2{
+    background-image: url("../images/help.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}

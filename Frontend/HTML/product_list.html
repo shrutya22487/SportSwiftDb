@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product List</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/base_style.css') }}">
+    <style>
+        .card-img-top {
+            object-fit: scale-down; /* Ensure the image covers the entire card */
+        }
+        .card-title {
+            font-size: 1.25rem; /* Adjust font size */
+            margin-bottom: 0.75rem; /* Adjust spacing */
+        }
+        .card-text {
+            font-weight: bold; /* Adjust font weight */
+        }
+        .product-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+    
+        .product-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+    
+</head>
+<body>
+
+<div class="container">
+    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+        <a href="/" class="d-flex fw-bolder align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+            <span class="link-hover-animation fs-4">SportSwiftDB</span>
+        </a>
+        <ul class="nav nav-pills">
+            <li class="grow nav-item"><a href="{{ url_for('home') }}" class="nav-link">Home</a></li>
+            <li class="grow nav-item"><a href="{{ url_for('explore') }}" class="nav-link active" aria-current="page" style="background-color: #E73725">Explore</a></li>
+            <li class="grow nav-item"><a href="{{ url_for('Cart.cart') }}" class="nav-link">Cart</a></li>
+            <li class="grow nav-item"><a href="{{ url_for('about') }}" class="nav-link">About</a></li>
+            <li class="dropdown-center">
+                <a class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" class="bi bi-person-circle mx-1 mt-1" viewBox="0 0 16 16">
+                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                    <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                </svg></a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{{url_for('Profile.profile')}}">Profile</a></li>
+                    {% if "customer_ID" not in session %}
+                    <li><a class="dropdown-item" href="{{ url_for('auth.login')}}" >Login</a></li>
+                    {% else %}
+                    <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
+                    {% endif %}
+                </ul>
+            </li>
+        </ul>
+    </header>
+</div>
+
+<!-- Main Content -->
+<main class="container mt-4">
+    {% if products %}
+    <div class="row">
+        {% for product in products %}
+        <div class="col-md-4 mb-4">
+            <div class="container card h-100 product-card">
+                <a href="{{ url_for('product_details.product_detail', product_id=product[0]) }}" class="card-link">
+                    <img src="{{ url_for('static', filename=product[6]) }}" class="card-img-top img-fluid " alt="{{ product[1] }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product[1] }}</h5>
+                        <p class="card-text">₹ {{ product[4] }}</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-warning" role="alert">
+        Sorry, no products are available.
+    </div>
+    {% endif %}
+</main>
+
+<!-- Footer -->
+<!--footer-->
+<div class="container">
+    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+        <p class="col-md-4 mb-0 text-body-secondary">© 2024 SportSwiftDB</p>
+
+        <ul class="nav col-md-4 justify-content-end">
+            <li class="nav-item"><a href="{{ url_for('home') }}" class="nav-link px-2 text-body-secondary">Home</a></li>
+            <li class="nav-item"><a href="{{ url_for('about') }}" class="nav-link px-2 text-body-secondary">About</a></li>
+        </ul>
+    </footer>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="{{ url_for('static', filename='/JavaScript/home_js.js') }}"></script>
+
+</body>
+</html>

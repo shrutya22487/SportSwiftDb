@@ -1,0 +1,9 @@
+.container.align-content-center{
+    max-width: 400px;
+}
+.body{
+    background-image: url("../images/login.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
